@@ -1,9 +1,10 @@
 import { Location, LocationsModel } from '@/types/locations';
 import React, { FC, useState } from 'react';
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
-import ChangeLocationIcon from './icons/ChangeLocationIcon';
-import FromToIcon from './icons/FromToIcon';
+import ChangeLocationIcon from './ChangeLocationIcon';
+import FromToIcon from './FromToIcon';
 import SelectInput from './SelectInput';
+import Divider from '../Divider';
 
 interface LocationSelectProps {
   options: LocationsModel['rows'];
@@ -32,27 +33,23 @@ const LocationSelect: FC<LocationSelectProps> = ({ options }) => {
   };
 
   return (
-    <View className='mt-8 mx-4'>
+    <View className='mt-8 mx-6'>
       <View className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'>
-        <FromToIcon width={30} height={30} className='h-100' />
-        <View className='h-[80px] border-l-[1px] border-grey-100' />
+        <FromToIcon width={25} height={25} />
+        <Divider />
         <SelectInput
           toggleDropdown={() => toggleDropdown(true)}
           location={fromLocation!}
           label='Nireden'
         />
-        <TouchableOpacity
-          onPress={() => changeLocations()}
-          className='relative h-12 w-12 items-center justify-center rounded-full border-[1px] border-grey-100'
-        >
-          <View className='relative h-[80px] border-l-[1px] border-grey-100'>
-            <ChangeLocationIcon
-              width={30}
-              height={30}
-              className='absolute top-0 left-0 z-10'
-            />
-          </View>
-        </TouchableOpacity>
+        <View className='items-center justify-center mr-4'>
+          <ChangeLocationIcon
+            width={25}
+            height={25}
+            onPress={() => changeLocations()}
+          />
+          <Divider />
+        </View>
         <SelectInput
           toggleDropdown={() => toggleDropdown(false)}
           location={toLocation!}

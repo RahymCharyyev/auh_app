@@ -14,9 +14,12 @@ const SelectInput: FC<SelectInputProps> = ({
   label,
 }) => {
   return (
-    <TouchableOpacity className='mx-4' onPress={() => toggleDropdown(true)}>
-      <Text className='text-sm'>Ugur:</Text>
-      <Text className='text-[18px] font-bold'>
+    <TouchableOpacity
+      className='mx-4 w-[120px]'
+      onPress={() => toggleDropdown(true)}
+    >
+      <Text className='text-[12px]'>Ugur:</Text>
+      <Text className='text-base font-bold'>
         {location ? location.name : label}
       </Text>
     </TouchableOpacity>

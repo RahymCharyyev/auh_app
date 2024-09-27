@@ -1,3 +1,4 @@
+import DateSelect from '@/components/DateSelect';
 import LocationSelect from '@/components/LocationSelect';
 import useLocations from '@/hooks/useLocations';
 import { Stack } from 'expo-router';
@@ -15,7 +16,10 @@ export default function Home() {
       {isLoading ? (
         <ActivityIndicator />
       ) : (
-        <LocationSelect options={locations?.data.rows || []} />
+        <>
+          <LocationSelect options={locations?.data.rows || []} />
+          <DateSelect options={locations?.data.rows || []} />
+        </>
       )}
     </View>
   );
