@@ -1,76 +1,78 @@
-import { Location, LocationsModel } from '@/types/locations';
 import React, { FC, useState } from 'react';
-import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
-import CalendarIcon from './CalendarIcon';
-// import SelectInput from './SelectInput';
+import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import CalendarPicker from 'react-native-calendar-picker';
 import Divider from '../Divider';
+import CalendarIcon from './CalendarIcon';
+import { today } from '@/constants/Dates';
 
-interface LocationSelectProps {
-  options: LocationsModel['rows'];
-}
-
-const DateSelect: FC<LocationSelectProps> = ({ options }) => {
+const DateSelect: FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectingFrom, setSelectingFrom] = useState(true);
-  const [fromLocation, setFromLocation] = useState<Location>();
-  const [toLocation, setToLocation] = useState<Location>();
+  const [selectedDate, setSelectedDate] = useState(today);
 
-  const toggleDropdown = (isFrom: boolean) => {
-    setSelectingFrom(isFrom);
-    setIsVisible(!isVisible);
+  const handleShowCalendar = () => {
+    setIsVisible(true);
   };
 
-  const handleSelect = (option: Location) => {
-    if (selectingFrom) setFromLocation(option);
-    else setToLocation(option);
-    toggleDropdown(selectingFrom);
+  const handleCloseCalendar = () => {
+    setIsVisible(false);
   };
 
-  const changeLocations = () => {
-    if (fromLocation && toLocation != undefined) setFromLocation(toLocation);
-    setToLocation(fromLocation);
+  const onChangeDate = (date: Date) => {
+    setSelectedDate(date);
+    handleCloseCalendar();
   };
-
   return (
     <View className='mt-8 mx-6'>
-      <View className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'>
+      <TouchableOpacity
+        onPress={() => handleShowCalendar()}
+        className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'
+      >
         <CalendarIcon width={25} height={25} />
         <Divider />
-        {/* <SelectInput
-          toggleDropdown={() => toggleDropdown(true)}
-          location={fromLocation!}
-          label='Nireden'
-        /> */}
-        <View className='items-center justify-center mr-4'>
-          {/* <ChangeLocationIcon
-            width={25}
-            height={25}
-            onPress={() => changeLocations()}
-          /> */}
-          <Divider />
+        <View className='ml-4'>
+          <Text className='text-[12px]'>Ugraýan senesi:</Text>
+          <Text className='text-base font-bold'>
+            {selectedDate.toLocaleDateString('ru-RU')}
+          </Text>
         </View>
-        {/* <SelectInput
-          toggleDropdown={() => toggleDropdown(false)}
-          location={toLocation!}
-          label='Nirä'
-        /> */}
-      </View>
+      </TouchableOpacity>
       <Modal visible={isVisible} transparent animationType='fade'>
         <TouchableOpacity
           className='flex-1 items-center justify-center bg-[#00000080]'
-          onPress={() => toggleDropdown(selectingFrom)}
+          onPress={handleCloseCalendar}
+          activeOpacity={1}
         >
-          <View className='w-[80%] rounded-[5px] bg-white p-[10px]'>
-            <FlatList
-              data={options}
-              keyExtractor={(item) => item.uuid}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => handleSelect(item)}>
-                  <Text className='p-[10px]'>{item.name}</Text>
-                </TouchableOpacity>
-              )}
+          <TouchableOpacity
+            className='w-[95%] rounded-md bg-white p-[10px]'
+            onPress={(e) => e.stopPropagation()}
+            activeOpacity={1}
+          >
+            <CalendarPicker
+              startFromMonday={true}
+              onDateChange={onChangeDate}
+              previousTitle='Geçen aý'
+              nextTitle='Indiki aý'
+              selectedDayColor='#2CA93B'
+              selectedDayTextColor='white'
+              weekdays={['Duş', 'Sen', 'Çar', 'Pen', 'Ann', 'Şen', 'Ýek']}
+              months={[
+                'Ýanwar',
+                'Fewral',
+                'Mart',
+                'Aprel',
+                'Maý',
+                'Iýun',
+                'Iýul',
+                'Awgust',
+                'Sentýabr',
+                'Oktýabr',
+                'Noýabr',
+                'Dekabr',
+              ]}
+              minDate={today}
+              restrictMonthNavigation={true}
             />
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
       </Modal>
     </View>
