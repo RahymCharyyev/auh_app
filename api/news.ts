@@ -2,7 +2,7 @@ import { apiUrl } from '@/constants/ApiUrl';
 import { NewsModel, Row } from '@/types/news';
 import { typedFetchJSON } from '@/utils/typedFetch';
 
-export function getNews(lang: string, page: string, per_page: string) {
+export function getNews(lang: string, page: number, per_page: number) {
   return typedFetchJSON<{ data: NewsModel }>(
     `${apiUrl}/news?`,
     {},

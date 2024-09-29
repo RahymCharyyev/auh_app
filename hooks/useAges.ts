@@ -3,7 +3,7 @@ import { getAges } from '@/api/ages';
 import { AgesModel } from '@/types/ages';
 
 const useAges = (languageCode: string) => {
-  const [isLoading, setLoading] = useState(true);
+  const [agesLoading, setAgesLoading] = useState(true);
   const [ages, setAges] = useState<{ data: AgesModel[] }>();
 
   const fetchAges = async () => {
@@ -13,7 +13,7 @@ const useAges = (languageCode: string) => {
     } catch (error) {
       console.error(error);
     } finally {
-      setLoading(false);
+      setAgesLoading(false);
     }
   };
 
@@ -21,7 +21,7 @@ const useAges = (languageCode: string) => {
     fetchAges();
   }, [languageCode]);
 
-  return { isLoading, ages };
+  return { agesLoading, ages };
 };
 
 export default useAges;
