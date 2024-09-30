@@ -93,10 +93,12 @@ const PassengerSelect: FC<PassengerSelectProps> = ({ ages }) => {
             adamlaryň sanyndan köp bolan ýaddaýynda, çaga nyrhnamasy arkaly
             petek sargyt edilmeli
           </Text>
-          <PrimaryButton
-            onPress={() => refRBSheet?.current?.close()}
-            text='Dowam et'
-          />
+          <View className='px-6'>
+            <PrimaryButton
+              onPress={() => refRBSheet?.current?.close()}
+              text='Dowam et'
+            />
+          </View>
         </View>
       </BottomSheet>
     </View>

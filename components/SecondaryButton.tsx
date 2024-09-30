@@ -8,7 +8,7 @@ interface SecondaryButtonProps {
 
 const SecondaryButton: FC<SecondaryButtonProps> = ({ onPress, text }) => {
   return (
-    <View className='px-6'>
+    <View>
       <TouchableOpacity
         className='py-3 bg-white border-[1px] border-grey-300 w-full self-center rounded-xl'
         onPress={onPress}

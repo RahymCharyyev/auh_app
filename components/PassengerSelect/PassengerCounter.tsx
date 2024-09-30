@@ -24,9 +24,9 @@ const PassengerCounter: FC<PassengerCounterProps> = ({
           disabled={child.length <= 0}
           className={`${
             child.length <= 0 ? 'bg-grey-100' : 'bg-primary'
-          } rounded-md px-2`}
+          } rounded-md px-3`}
         >
-          <Text className='text-white'>-</Text>
+          <Text className='text-white text-xl'>-</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -34,9 +34,9 @@ const PassengerCounter: FC<PassengerCounterProps> = ({
           disabled={adult.length <= 1}
           className={`${
             adult.length <= 1 ? 'bg-grey-100' : 'bg-primary'
-          } rounded-md px-2`}
+          } rounded-md px-3`}
         >
-          <Text className='text-white'>-</Text>
+          <Text className='text-white text-xl'>-</Text>
         </TouchableOpacity>
       )}
       <Text className='text-xl font-bold'>
@@ -47,9 +47,9 @@ const PassengerCounter: FC<PassengerCounterProps> = ({
         disabled={adult.length + child.length >= 10}
         className={`${
           adult.length + child.length >= 10 ? 'bg-grey-100' : 'bg-primary'
-        } rounded-md px-2`}
+        } rounded-md px-3`}
       >
-        <Text className='text-white'>+</Text>
+        <Text className='text-white text-xl'>+</Text>
       </TouchableOpacity>
     </View>
   );

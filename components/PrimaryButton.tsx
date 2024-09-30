@@ -9,7 +9,7 @@ interface PrimaryButtonProps {
 
 const PrimaryButton: FC<PrimaryButtonProps> = ({ onPress, text }) => {
   return (
-    <TouchableOpacity className='px-6 py-4' onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <LinearGradient
         className='w-full self-center rounded-xl'
         colors={['#2FCC56', '#27A847']}

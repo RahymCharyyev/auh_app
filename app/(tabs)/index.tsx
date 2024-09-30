@@ -6,7 +6,7 @@ import SecondaryButton from '@/components/SecondaryButton';
 import useAges from '@/hooks/useAges';
 import useLocations from '@/hooks/useLocations';
 import { Stack } from 'expo-router';
-import { ActivityIndicator, Image, ScrollView } from 'react-native';
+import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
 //@ts-ignore
 import bgImage from '@/assets/images/bg.png';
 import NewsSection from '@/components/NewsSection';
@@ -27,8 +27,6 @@ export default function Home() {
     refetch();
   }, [perPage]);
 
-  console.log(news);
-
   return (
     <ScrollView>
       <Stack.Screen options={{ headerShown: false }} />
@@ -44,11 +42,15 @@ export default function Home() {
       ) : (
         <PassengerSelect ages={ages?.data || []} />
       )}
-      <PrimaryButton onPress={() => console.log('eee')} text='Gözlemek' />
-      <SecondaryButton
-        onPress={() => console.log('eee')}
-        text='Petekleri gaýtarmak'
-      />
+      <View className='px-6 py-4'>
+        <PrimaryButton onPress={() => console.log('eee')} text='Gözlemek' />
+      </View>
+      <View className='px-6'>
+        <SecondaryButton
+          onPress={() => console.log('eee')}
+          text='Petekleri gaýtarmak'
+        />
+      </View>
       {newsLoading ? (
         <ActivityIndicator />
       ) : (
