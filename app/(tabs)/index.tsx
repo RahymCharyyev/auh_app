@@ -5,7 +5,7 @@ import PrimaryButton from '@/components/PrimaryButton';
 import SecondaryButton from '@/components/SecondaryButton';
 import useAges from '@/hooks/useAges';
 import useLocations from '@/hooks/useLocations';
-import { Stack } from 'expo-router';
+import { router, Stack, useGlobalSearchParams } from 'expo-router';
 import { ActivityIndicator, Image, ScrollView, View } from 'react-native';
 //@ts-ignore
 import bgImage from '@/assets/images/bg.png';
@@ -17,7 +17,8 @@ export default function Home() {
   const [perPage, setPerPage] = useState(5);
   const { isLoading, locations } = useLocations('tk');
   const { agesLoading, ages } = useAges('tk');
-  const { newsLoading, news, refetch } = useNews('tk', 0, perPage);
+  const { newsLoading, news, refetch } = useNews('tk', perPage, 0);
+  const { from, to, date } = useGlobalSearchParams();
 
   const loadMoreNews = () => {
     setPerPage((prevPerPage) => prevPerPage + 5);
@@ -26,6 +27,20 @@ export default function Home() {
   useEffect(() => {
     refetch();
   }, [perPage]);
+
+  const handleSearch = () => {
+    // Получаем текущие параметры для поиска
+    // const searchParams = new URLSearchParams({
+    //   fromLocationId: from, // замените на ID выбранного места отправления
+    //   toLocationId: to, // замените на ID выбранного места назначения
+    //   date: date.toISOString().split('T')[0], // форматируем дату в строку
+    // });
+    router.push(
+      `/trips?fromLocationId=${from}&toLocationId=${to}&date=${date}`
+    );
+  };
+
+  console.log(from);
 
   return (
     <ScrollView>
@@ -43,7 +58,7 @@ export default function Home() {
         <PassengerSelect ages={ages?.data || []} />
       )}
       <View className='px-6 py-4'>
-        <PrimaryButton onPress={() => console.log('eee')} text='Gözlemek' />
+        <PrimaryButton onPress={handleSearch} text='Gözlemek' />
       </View>
       <View className='px-6'>
         <SecondaryButton
@@ -54,7 +69,12 @@ export default function Home() {
       {newsLoading ? (
         <ActivityIndicator />
       ) : (
-        <NewsSection news={news?.data.rows || []} onLoadMore={loadMoreNews} />
+        <NewsSection
+          news={news?.data.rows || []}
+          onLoadMore={loadMoreNews}
+          title='Habarlar'
+          isMain
+        />
       )}
     </ScrollView>
   );

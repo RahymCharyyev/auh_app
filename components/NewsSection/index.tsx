@@ -7,13 +7,20 @@ import { dateTransfrom } from '@/utils/dateTransform';
 
 interface NewsSectionProps {
   news: NewsModel['rows'];
-  onLoadMore: () => void;
+  onLoadMore?: () => void;
+  title: string;
+  isMain: boolean;
 }
 
-const NewsSection: FC<NewsSectionProps> = ({ news, onLoadMore }) => {
+const NewsSection: FC<NewsSectionProps> = ({
+  news,
+  onLoadMore,
+  title,
+  isMain,
+}) => {
   return (
     <View className='px-6 py-4'>
-      <Text className='text-secondary font-semibold text-lg'>Habarlar</Text>
+      <Text className='text-secondary font-semibold text-lg'>{title}</Text>
       <View className='flex gap-y-6'>
         {news.map((item) => (
           <Link key={item.uuid} href={`/news/${item.uuid}`} asChild>
@@ -37,8 +44,11 @@ const NewsSection: FC<NewsSectionProps> = ({ news, onLoadMore }) => {
             </Pressable>
           </Link>
         ))}
-        <View className='py-2'>
-          <SecondaryButton onPress={onLoadMore} text='Ýene-de görkez' />
+        <View className={`${isMain ? 'py-2' : 'hidden'}`}>
+          <SecondaryButton
+            onPress={() => onLoadMore?.()}
+            text='Ýene-de görkez'
+          />
         </View>
       </View>
     </View>

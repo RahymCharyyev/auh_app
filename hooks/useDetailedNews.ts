@@ -3,15 +3,15 @@ import { getDetailedNews } from '@/api/news';
 import { Row } from '@/types/news';
 
 const useDetailedNews = (id: string, languageCode: string) => {
-  const [newsLoading, setNewsLoading] = useState(true);
-  const [news, setNews] = useState<Row | null>(null);
+  const [detailedNewsLoading, setDetailedNewsLoading] = useState(true);
+  const [detailedNews, setDetailedNews] = useState<Row | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchNewsDetails = async () => {
     try {
       const response = await getDetailedNews(id, languageCode);
       if (response?.data) {
-        setNews(response.data);
+        setDetailedNews(response.data);
       } else {
         setError('No news found');
       }
@@ -19,7 +19,7 @@ const useDetailedNews = (id: string, languageCode: string) => {
       setError('Failed to load news details');
       console.error(err);
     } finally {
-      setNewsLoading(false);
+      setDetailedNewsLoading(false);
     }
   };
 
@@ -29,7 +29,12 @@ const useDetailedNews = (id: string, languageCode: string) => {
     }
   }, [id, languageCode]);
 
-  return { newsLoading, news, error, refetch: fetchNewsDetails };
+  return {
+    detailedNewsLoading,
+    detailedNews,
+    error,
+    refetch: fetchNewsDetails,
+  };
 };
 
 export default useDetailedNews;

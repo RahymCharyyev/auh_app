@@ -4,10 +4,12 @@ import CalendarPicker from 'react-native-calendar-picker';
 import Divider from '../Divider';
 import CalendarIcon from './CalendarIcon';
 import { today } from '@/constants/Dates';
+import { router, useGlobalSearchParams } from 'expo-router';
 
 const DateSelect: FC = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(today);
+  const { date } = useGlobalSearchParams();
+  const selectedDate = typeof date === 'string' ? new Date(date) : today;
 
   const handleShowCalendar = () => {
     setIsVisible(true);
@@ -17,10 +19,11 @@ const DateSelect: FC = () => {
     setIsVisible(false);
   };
 
-  const onChangeDate = (date: Date) => {
-    setSelectedDate(date);
+  const onChangeDate = (newDate: Date) => {
+    router.setParams({ date: newDate.toISOString().split('T')[0] });
     handleCloseCalendar();
   };
+
   return (
     <View className='mt-8 mx-6'>
       <TouchableOpacity

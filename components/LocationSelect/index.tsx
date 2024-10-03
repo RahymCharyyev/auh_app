@@ -1,10 +1,11 @@
 import { Location, LocationsModel } from '@/types/locations';
+import { router, useGlobalSearchParams } from 'expo-router';
 import React, { FC, useState } from 'react';
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
+import Divider from '../Divider';
 import ChangeLocationIcon from './ChangeLocationIcon';
 import FromToIcon from './FromToIcon';
 import SelectInput from './SelectInput';
-import Divider from '../Divider';
 
 interface LocationSelectProps {
   options: LocationsModel['rows'];
@@ -13,8 +14,10 @@ interface LocationSelectProps {
 const LocationSelect: FC<LocationSelectProps> = ({ options }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectingFrom, setSelectingFrom] = useState(true);
-  const [fromLocation, setFromLocation] = useState<Location>();
-  const [toLocation, setToLocation] = useState<Location>();
+  const { from, to } = useGlobalSearchParams();
+
+  const fromLocation = options.find((location) => location.uuid === from);
+  const toLocation = options.find((location) => location.uuid === to);
 
   const toggleDropdown = (isFrom: boolean) => {
     setSelectingFrom(isFrom);
@@ -22,14 +25,18 @@ const LocationSelect: FC<LocationSelectProps> = ({ options }) => {
   };
 
   const handleSelect = (option: Location) => {
-    if (selectingFrom) setFromLocation(option);
-    else setToLocation(option);
+    const newParams = selectingFrom
+      ? { from: option.uuid, to }
+      : { from, to: option.uuid };
+
+    router.setParams(newParams);
     toggleDropdown(selectingFrom);
   };
 
   const changeLocations = () => {
-    if (fromLocation && toLocation != undefined) setFromLocation(toLocation);
-    setToLocation(fromLocation);
+    if (fromLocation && toLocation) {
+      router.setParams({ from: toLocation.uuid, to: fromLocation.uuid });
+    }
   };
 
   return (

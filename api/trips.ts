@@ -4,11 +4,11 @@ import { typedFetchJSON } from '@/utils/typedFetch';
 
 export function getTrips(
   lang: string,
-  startDate?: string,
   fromLocationId?: string,
   toLocationId?: string,
-  seatCount?: string,
-  isActive?: boolean
+  startDate?: string,
+  isActive?: boolean,
+  seatCount?: string
 ) {
   return typedFetchJSON<{ data: TripsModel }>(
     `${apiUrl}/trips?`,

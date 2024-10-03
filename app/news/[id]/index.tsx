@@ -7,19 +7,27 @@ import {
   useWindowDimensions,
   Image,
 } from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import useDetailedNews from '@/hooks/useDetailedNews';
 import RenderHtml from 'react-native-render-html';
 import { dateTransfrom } from '@/utils/dateTransform';
+import NewsSection from '@/components/NewsSection';
+import useNews from '@/hooks/useNews';
 
 const DetailedNews = () => {
   const { id } = useLocalSearchParams();
-  const { newsLoading, news, error } = useDetailedNews(id as string, 'tk');
+  const { detailedNewsLoading, detailedNews, error } = useDetailedNews(
+    id as string,
+    'tk'
+  );
+  const { newsLoading, news } = useNews('tk', 6);
+  const filteredNews = news?.data.rows.filter(
+    (e) => e.uuid !== detailedNews?.uuid
+  );
   const { width } = useWindowDimensions();
 
-  if (newsLoading) {
+  if (detailedNewsLoading || newsLoading)
     return <ActivityIndicator size='large' color='#0000ff' />;
-  }
 
   if (error) {
     return (
@@ -29,29 +37,44 @@ const DetailedNews = () => {
     );
   }
 
-  return news ? (
+  return detailedNews ? (
     <ScrollView>
+      <Stack.Screen
+        options={{
+          title: 'Habarlar',
+          headerStyle: {
+            backgroundColor: '#2CA93B',
+          },
+          headerTintColor: '#fff',
+          headerTitleAlign: 'center',
+        }}
+      />
       <Image
         source={{
-          uri: news.imagePath,
+          uri: detailedNews.imagePath,
         }}
         width={width}
         height={250}
       />
       <View className='flex gap-y-2 px-4 py-4'>
         <Text className='text-justify text-grey-300'>
-          {dateTransfrom(news.createdAt)}
+          {dateTransfrom(detailedNews.createdAt)}
         </Text>
-        <Text className='font-medium text-xl'>{news.detail.title}</Text>
+        <Text className='font-medium text-xl'>{detailedNews.detail.title}</Text>
         <View className='border-b-grey-400 border-b-[1px] py-1 my-1' />
         <RenderHtml
           contentWidth={width}
-          source={{ html: news?.detail.description }}
+          source={{ html: detailedNews?.detail.description }}
           enableExperimentalMarginCollapsing={true}
           enableExperimentalGhostLinesPrevention={true}
         />
         <View className='border-b-grey-400 border-b-[1px] py-1 my-1' />
       </View>
+      <NewsSection
+        news={filteredNews || []}
+        title='Soňky goşulanlar'
+        isMain={false}
+      />
     </ScrollView>
   ) : (
     <Text>No news found</Text>
