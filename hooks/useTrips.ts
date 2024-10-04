@@ -30,8 +30,10 @@ const useTrips = (
   };
 
   useEffect(() => {
-    fetchTrips();
-  }, [languageCode]);
+    if (fromLocationId && toLocationId && startDate) {
+      fetchTrips();
+    }
+  }, [fromLocationId, toLocationId, startDate]);
 
   return { tripsLoading, trips, refetch: fetchTrips };
 };

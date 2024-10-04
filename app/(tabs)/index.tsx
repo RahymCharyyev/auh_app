@@ -19,6 +19,12 @@ export default function Home() {
   const { agesLoading, ages } = useAges('tk');
   const { newsLoading, news, refetch } = useNews('tk', perPage, 0);
   const { from, to, date } = useGlobalSearchParams();
+  const searchParams = {
+    id: '001',
+    from: from,
+    to: to,
+    date: date,
+  };
 
   const loadMoreNews = () => {
     setPerPage((prevPerPage) => prevPerPage + 5);
@@ -29,18 +35,8 @@ export default function Home() {
   }, [perPage]);
 
   const handleSearch = () => {
-    // Получаем текущие параметры для поиска
-    // const searchParams = new URLSearchParams({
-    //   fromLocationId: from, // замените на ID выбранного места отправления
-    //   toLocationId: to, // замените на ID выбранного места назначения
-    //   date: date.toISOString().split('T')[0], // форматируем дату в строку
-    // });
-    router.push(
-      `/trips?fromLocationId=${from}&toLocationId=${to}&date=${date}`
-    );
+    router.push({ pathname: `/trips/[id]`, params: searchParams });
   };
-
-  console.log(from);
 
   return (
     <ScrollView>
