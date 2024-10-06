@@ -1,14 +1,20 @@
+import CalendarComponent from '@/components/Trips/Calendar';
 import SelectPlaceIcon from '@/components/Trips/SelectPlaceIcon';
 import TripDurationIcon from '@/components/Trips/TripDurationIcon';
 import useTrips from '@/hooks/useTrips';
 import { dateTransform, getHours } from '@/utils/dateTransform';
+import dayjs from 'dayjs';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, Stack, useGlobalSearchParams } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 
 export default function TripDetails() {
   const { from, to, date } = useGlobalSearchParams();
+  const formattedDate = Array.isArray(date) ? date[0] : date;
+  const [selectedDate, setSelectedDate] = useState<string>(
+    dayjs(formattedDate).format('YYYY-MM-DD')
+  );
   const {
     tripsLoading,
     trips,
@@ -37,14 +43,16 @@ export default function TripDetails() {
           headerTitleAlign: 'center',
         }}
       />
+      <CalendarComponent
+        onSelectDate={setSelectedDate}
+        selected={selectedDate}
+      />
       <View className='flex gap-6 rounded-lg px-6 my-6'>
         {trips?.data.rows.map((item) => {
           const finishTime = (() => {
-            const startDate = new Date(item.startDate);
-            startDate.setHours(startDate.getHours() + Number(item.duration));
-            const hours = String(startDate.getHours()).padStart(2, '0');
-            const minutes = String(startDate.getMinutes()).padStart(2, '0');
-            return `${hours}:${minutes}`;
+            const startDate = dayjs(item.startDate);
+            const finishDate = startDate.add(Number(item.duration), 'hour');
+            return finishDate.format('HH:mm');
           })();
           return (
             <View key={item.uuid}>
