@@ -10,7 +10,7 @@ import {
 import { Stack, useLocalSearchParams } from 'expo-router';
 import useDetailedNews from '@/hooks/useDetailedNews';
 import RenderHtml from 'react-native-render-html';
-import { dateTransform } from '@/utils/dateTransform';
+import { fullDate } from '@/utils/dateUtil';
 import NewsSection from '@/components/NewsSection';
 import useNews from '@/hooks/useNews';
 
@@ -58,7 +58,7 @@ const DetailedNews = () => {
       />
       <View className='flex gap-y-2 px-4 py-4'>
         <Text className='text-justify text-grey-300'>
-          {dateTransform(detailedNews.createdAt)}
+          {fullDate(detailedNews.createdAt)}
         </Text>
         <Text className='font-medium text-xl'>{detailedNews.detail.title}</Text>
         <View className='border-b-grey-400 border-b-[1px] py-1 my-1' />

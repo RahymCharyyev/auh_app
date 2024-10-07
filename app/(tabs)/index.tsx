@@ -12,18 +12,27 @@ import bgImage from '@/assets/images/bg.png';
 import NewsSection from '@/components/NewsSection';
 import useNews from '@/hooks/useNews';
 import { useEffect, useState } from 'react';
+import { toastShow } from '@/utils/toastShow';
 
 export default function Home() {
   const [perPage, setPerPage] = useState(5);
   const { isLoading, locations } = useLocations('tk');
   const { agesLoading, ages } = useAges('tk');
   const { newsLoading, news, refetch } = useNews('tk', perPage, 0);
-  const { from, to, date } = useGlobalSearchParams();
+  const {
+    from,
+    to,
+    date,
+    adultCount = '1',
+    childCount = '0',
+  } = useGlobalSearchParams();
   const searchParams = {
     id: '001',
     from: from,
     to: to,
     date: date,
+    adultCount: adultCount,
+    childCount: childCount,
   };
 
   const loadMoreNews = () => {
@@ -35,24 +44,34 @@ export default function Home() {
   }, [perPage]);
 
   const handleSearch = () => {
-    router.push({ pathname: `/trips/[id]`, params: searchParams });
+    if (from && to)
+      router.push({ pathname: `/trips/[id]`, params: searchParams });
+    else if (from) toastShow('Barmaly şäherler hökman saýlanmaly', 'red');
+    else if (to) toastShow('Ugramaly şäherler hökman saýlanmaly', 'red');
+    else toastShow('Ugramaly we barmaly şäherler hökman saýlanmaly', 'red');
   };
 
   return (
     <ScrollView>
       <Stack.Screen options={{ headerShown: false }} />
       <Image className='h-[265px] w-full' source={bgImage} resizeMode='cover' />
-      {isLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <LocationSelect options={locations?.data.rows || []} />
-      )}
-      <DateSelect />
-      {agesLoading ? (
-        <ActivityIndicator />
-      ) : (
-        <PassengerSelect ages={ages?.data || []} />
-      )}
+      <View className='mt-8'>
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <LocationSelect options={locations?.data.rows || []} />
+        )}
+        <DateSelect />
+        {agesLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <PassengerSelect
+            ages={ages?.data || []}
+            adultCount={adultCount.toString()}
+            childCount={childCount.toString()}
+          />
+        )}
+      </View>
       <View className='px-6 py-4'>
         <PrimaryButton onPress={handleSearch} text='Gözlemek' />
       </View>

@@ -25,7 +25,7 @@ const DateSelect: FC = () => {
   };
 
   return (
-    <View className='mt-8 mx-6'>
+    <View className='mt-4 mx-6'>
       <TouchableOpacity
         onPress={() => handleShowCalendar()}
         className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'

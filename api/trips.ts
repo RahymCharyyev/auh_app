@@ -1,4 +1,5 @@
 import { apiUrl } from '@/constants/ApiUrl';
+import { TripModel } from '@/types/trip';
 import { TripsModel } from '@/types/trips';
 import { typedFetchJSON } from '@/utils/typedFetch';
 
@@ -24,5 +25,12 @@ export function getTrips(
   );
 }
 
-export const tripFetcher = (url: string, options?: RequestInit) =>
-  fetch(url, options).then((res) => res.json());
+export function getDetailedTrip(id: string, lang: string) {
+  return typedFetchJSON<{ data: TripModel }>(
+    `${apiUrl}/trips/${id}?`,
+    {},
+    {
+      lang,
+    }
+  );
+}

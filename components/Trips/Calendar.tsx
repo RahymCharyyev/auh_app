@@ -1,12 +1,11 @@
-// import moment, { Moment } from 'moment';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import { ScrollView } from 'react-native';
 import Date from './Date';
 import dayjs from 'dayjs';
 
 interface CalendarComponentProps {
   onSelectDate: any;
-  selected: string;
+  selected: dayjs.Dayjs;
 }
 
 const CalendarComponent: FC<CalendarComponentProps> = ({
@@ -14,6 +13,7 @@ const CalendarComponent: FC<CalendarComponentProps> = ({
   selected,
 }) => {
   const [dates, setDates] = useState<dayjs.Dayjs[]>([]);
+  const scrollViewRef = useRef<ScrollView | null>(null);
 
   const getDates = () => {
     const _dates = [];
@@ -28,8 +28,21 @@ const CalendarComponent: FC<CalendarComponentProps> = ({
     getDates();
   }, []);
 
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      const index = dates.findIndex((date) => date.isSame(selected, 'day'));
+      if (index !== -1) {
+        scrollViewRef.current.scrollTo({
+          x: index * 132,
+          animated: true,
+        });
+      }
+    }
+  }, [selected, dates]);
+
   return (
     <ScrollView
+      ref={scrollViewRef}
       className='w-full px-3'
       horizontal
       showsHorizontalScrollIndicator={false}

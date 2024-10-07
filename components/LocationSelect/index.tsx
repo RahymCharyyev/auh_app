@@ -40,7 +40,7 @@ const LocationSelect: FC<LocationSelectProps> = ({ options }) => {
   };
 
   return (
-    <View className='mt-8 mx-6'>
+    <View className='mx-6'>
       <View className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'>
         <FromToIcon width={25} height={25} />
         <Divider />

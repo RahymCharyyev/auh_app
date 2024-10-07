@@ -2,8 +2,8 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import React, { FC } from 'react';
 
 interface PassengerCounterProps {
-  adult: string[];
-  child: string[];
+  adult: number;
+  child: number;
   addPassenger: () => void;
   removePassenger: () => void;
   isChild?: boolean;
@@ -21,9 +21,9 @@ const PassengerCounter: FC<PassengerCounterProps> = ({
       {isChild ? (
         <TouchableOpacity
           onPress={removePassenger}
-          disabled={child.length <= 0}
+          disabled={child <= 0}
           className={`${
-            child.length <= 0 ? 'bg-grey-100' : 'bg-primary'
+            child <= 0 ? 'bg-grey-100' : 'bg-primary'
           } rounded-md px-3`}
         >
           <Text className='text-white text-xl'>-</Text>
@@ -31,22 +31,20 @@ const PassengerCounter: FC<PassengerCounterProps> = ({
       ) : (
         <TouchableOpacity
           onPress={removePassenger}
-          disabled={adult.length <= 1}
+          disabled={adult <= 1}
           className={`${
-            adult.length <= 1 ? 'bg-grey-100' : 'bg-primary'
+            adult <= 1 ? 'bg-grey-100' : 'bg-primary'
           } rounded-md px-3`}
         >
           <Text className='text-white text-xl'>-</Text>
         </TouchableOpacity>
       )}
-      <Text className='text-xl font-bold'>
-        {isChild ? child.length : adult.length}
-      </Text>
+      <Text className='text-xl font-bold'>{isChild ? child : adult}</Text>
       <TouchableOpacity
         onPress={addPassenger}
-        disabled={adult.length + child.length >= 10}
+        disabled={adult + child >= 10}
         className={`${
-          adult.length + child.length >= 10 ? 'bg-grey-100' : 'bg-primary'
+          adult + child >= 10 ? 'bg-grey-100' : 'bg-primary'
         } rounded-md px-3`}
       >
         <Text className='text-white text-xl'>+</Text>

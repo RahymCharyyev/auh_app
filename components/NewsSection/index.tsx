@@ -3,7 +3,7 @@ import { Link } from 'expo-router';
 import React, { FC } from 'react';
 import { Image, Pressable, Text, View } from 'react-native';
 import SecondaryButton from '../SecondaryButton';
-import { dateTransform } from '@/utils/dateTransform';
+import { fullDate } from '@/utils/dateUtil';
 
 interface NewsSectionProps {
   news: NewsModel['rows'];
@@ -35,7 +35,7 @@ const NewsSection: FC<NewsSectionProps> = ({
               />
               <View className='flex gap-y-1 max-w-[240px] mx-auto'>
                 <Text className='text-xs text-grey-300'>
-                  {dateTransform(item.createdAt)}
+                  {fullDate(item.createdAt)}
                 </Text>
                 <Text numberOfLines={4} className='font-bold mr-6 text-[14px]'>
                   {item.detail.title}

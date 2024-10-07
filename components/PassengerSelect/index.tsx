@@ -1,5 +1,6 @@
 import { AgesModel } from '@/types/ages';
-import React, { FC, useRef, useState } from 'react';
+import { router } from 'expo-router';
+import React, { FC, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import Divider from '../Divider';
 import PrimaryButton from '../PrimaryButton';
@@ -9,41 +10,44 @@ import PassengerIcon from './PassengerIcon';
 
 interface PassengerSelectProps {
   ages: AgesModel[];
+  adultCount: string;
+  childCount: string;
 }
 
-const PassengerSelect: FC<PassengerSelectProps> = ({ ages }) => {
+const PassengerSelect: FC<PassengerSelectProps> = ({
+  ages,
+  adultCount,
+  childCount,
+}) => {
   const refRBSheet = useRef<any>();
-  const adultModel = ages[0];
-  const childModel = ages[1];
-  const [adult, setAdult] = useState<string[]>([adultModel.uuid]);
-  const [child, setChild] = useState<string[]>([]);
+  const adult = Number(adultCount);
+  const child = Number(childCount);
 
   const handleAddAdult = () => {
-    if (adult.length + child.length < 10) {
-      setAdult((prevAdults) => [...prevAdults, adultModel.uuid]);
-    }
+    if (adult + child < 10) updateSearchParams(adult + 1, child);
   };
 
   const handleRemoveAdult = () => {
-    if (adult.length > 1) {
-      setAdult((prevAdults) => prevAdults.slice(0, -1));
-    }
+    if (adult > 1) updateSearchParams(adult - 1, child);
   };
 
   const handleAddChild = () => {
-    if (adult.length + child.length < 10) {
-      setChild((prevChildren) => [...prevChildren, childModel.uuid]);
-    }
+    if (adult + child < 10) updateSearchParams(adult, child + 1);
   };
 
   const handleRemoveChild = () => {
-    if (child.length > 0) {
-      setChild((prevChildren) => prevChildren.slice(0, -1));
-    }
+    if (child > 0) updateSearchParams(adult, child - 1);
+  };
+
+  const updateSearchParams = (newAdultCount: number, newChildCount: number) => {
+    router.setParams({
+      adultCount: newAdultCount.toString(),
+      childCount: newChildCount.toString(),
+    });
   };
 
   return (
-    <View className='mt-8 mx-6'>
+    <View className='mt-4 mx-6'>
       <TouchableOpacity
         onPress={() => refRBSheet?.current?.open()}
         className='flex flex-row items-center rounded-2xl border-[1px] border-grey-100'
@@ -52,7 +56,7 @@ const PassengerSelect: FC<PassengerSelectProps> = ({ ages }) => {
         <Divider />
         <View className='ml-4'>
           <Text className='text-[12px]'>Ýolagçy sany:</Text>
-          <Text className='text-base font-bold'>{`${adult.length} uly, ${child.length} çaga`}</Text>
+          <Text className='text-base font-bold'>{`${adult} uly, ${child} çaga`}</Text>
         </View>
       </TouchableOpacity>
       <BottomSheet refRBSheet={refRBSheet}>
