@@ -22,26 +22,34 @@ export default function BusSchemePage() {
 
   console.log(selectedSeats);
 
+  const handleSelectSeat = (number: number, uuid: string) => {
+    setSelectedSeats((prev) => [...prev, number]);
+  };
+
+  console.log(selectedSeats);
+
   return (
-    // <ScrollView>
-    <>
-      <Stack.Screen
-        options={{
-          title: `Ýer saýlamak`,
-          headerStyle: {
-            backgroundColor: '#2CA93B',
-          },
-          headerTintColor: '#fff',
-          headerTitleAlign: 'center',
-        }}
-      />
-      <BusScheme
-        seats={detailedTrip?.data?.seats!}
-        seatCount={detailedTrip?.data?.bus?.seatCount!}
-        handleSelectSeat={() => console.log('s')}
-        selectedSeats={selectedSeats}
-      />
-    </>
-    // </ScrollView>
+    <ScrollView>
+      <>
+        <Stack.Screen
+          options={{
+            title: `Ýer saýlamak`,
+            headerStyle: {
+              backgroundColor: '#2CA93B',
+            },
+            headerTintColor: '#fff',
+            headerTitleAlign: 'center',
+          }}
+        />
+        <View className='rotate-[-90deg] mt-[500px] mb-[100px]'>
+          <BusScheme
+            seats={detailedTrip?.data?.seats!}
+            seatCount={detailedTrip?.data?.bus?.seatCount!}
+            handleSelectSeat={handleSelectSeat}
+            selectedSeats={selectedSeats}
+          />
+        </View>
+      </>
+    </ScrollView>
   );
 }
